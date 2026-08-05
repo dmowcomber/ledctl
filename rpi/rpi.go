@@ -407,6 +407,12 @@ var rasPiVariants = map[uint32]hw{
 		vcBase:     VIDEOCORE_BASE_RPI2,
 		name:       "Pi 3 B+",
 	},
+	0xA020D4: {
+		hwType:     RPI_HWVER_TYPE_PI2,
+		periphBase: PERIPH_BASE_RPI2,
+		vcBase:     VIDEOCORE_BASE_RPI2,
+		name:       "Pi 3 B+",
+	},
 	0xA02082: {
 		hwType:     RPI_HWVER_TYPE_PI2,
 		periphBase: PERIPH_BASE_RPI2,
