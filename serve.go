@@ -24,6 +24,13 @@ var ledChip = flag.String("ledchip", "ws281x", "The type of LED strip to drive: 
 var port = flag.Int("port", 24601, "The port that the server should listen to")
 var pixels = flag.Int("pixels", 5*32, "The number of pixels to be controlled")
 var pixelOrder = flag.String("order", "GRB", "The color ordering of the pixels")
+var mqttBroker = flag.String("mqtt-broker", "", "MQTT broker URL (e.g. tcp://localhost:1883). If empty, MQTT integration is disabled.")
+var mqttUser = flag.String("mqtt-user", "", "MQTT username")
+var mqttPassword = flag.String("mqtt-password", "", "MQTT password")
+var mqttTopic = flag.String("mqtt-topic", "ledctl/light", "Base MQTT topic for state and commands")
+var mqttDiscoveryPrefix = flag.String("mqtt-discovery-prefix", "homeassistant", "Home Assistant MQTT discovery topic prefix")
+var mqttName = flag.String("mqtt-name", "LED Strip", "Name of the light entity in Home Assistant")
+var mqttClientID = flag.String("mqtt-client-id", "ledctl", "MQTT client ID")
 
 type Server struct {
 	pa      *pixarray.PixArray
@@ -32,6 +39,7 @@ type Server struct {
 	laste   effects.Effect
 	off     bool
 	running bool
+	mqtt    *MQTTClient
 }
 
 func NewServer(port int, pa *pixarray.PixArray) (*Server, error) {
@@ -42,7 +50,7 @@ func NewServer(port int, pa *pixarray.PixArray) (*Server, error) {
 	}
 	c := make(chan effects.Effect)
 	log.Printf("Listening on port %d", port)
-	return &Server{pa, l, c, nil, true, false}, nil
+	return &Server{pa, l, c, nil, true, false, nil}, nil
 }
 
 func parseDuration(parms string) (string, time.Duration, error) {
@@ -200,6 +208,7 @@ func (s *Server) runEffects() {
 			e.Start(s.pa, start)
 			s.running = true
 			steps = 0
+			s.notifyStateChange()
 		}
 		d = e.NextStep(s.pa, time.Now())
 		steps++
@@ -219,6 +228,7 @@ func (s *Server) runEffects() {
 					log.Fatalf("Failed power-off: %v", err)
 				}
 			}
+			s.notifyStateChange()
 		} else {
 			laste = e
 		}
@@ -273,6 +283,7 @@ func (s *Server) handleConnection(c net.Conn) {
 			s.c <- e
 			s.laste = e
 			s.off = false
+			s.notifyStateChange()
 		}
 	}
 }
@@ -316,6 +327,24 @@ func main() {
 	s, err := NewServer(*port, pa)
 	if err != nil {
 		log.Fatalf("Failed creating server: %v", err)
+	}
+
+	if *mqttBroker != "" {
+		cfg := MQTTConfig{
+			Broker:          *mqttBroker,
+			User:            *mqttUser,
+			Password:        *mqttPassword,
+			Topic:           *mqttTopic,
+			DiscoveryPrefix: *mqttDiscoveryPrefix,
+			Name:            *mqttName,
+			ClientID:        *mqttClientID,
+		}
+		mc, err := NewMQTTClient(cfg, s)
+		if err != nil {
+			log.Printf("Warning: Failed to start MQTT client: %v", err)
+		} else {
+			s.mqtt = mc
+		}
 	}
 
 	go s.runEffects()

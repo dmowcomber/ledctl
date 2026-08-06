@@ -100,6 +100,38 @@ KNIGHTRIDER <duration>
 
 Simulates the light-strip effect from Kitt, the car in the 1980s TV series "Knight Rider".
 
+## Home Assistant & MQTT Integration
+
+`ledctl` supports MQTT integration with automatic Home Assistant MQTT Discovery. When enabled, your LED strip will automatically appear as a Light entity in Home Assistant.
+
+To enable MQTT integration, specify the `--mqtt-broker` flag when running `ledctl`:
+
+```bash
+./ledctl --mqtt-broker=tcp://192.168.1.100:1883 --mqtt-topic=ledctl/light --mqtt-name="Living Room LEDs" &
+```
+
+### MQTT Flags
+
+* `--mqtt-broker`: MQTT broker URL (e.g. `tcp://localhost:1883`). If omitted, MQTT is disabled.
+* `--mqtt-user`: Username for MQTT broker (optional).
+* `--mqtt-password`: Password for MQTT broker (optional).
+* `--mqtt-topic`: Base MQTT topic for light state and commands (default: `ledctl/light`).
+* `--mqtt-discovery-prefix`: Home Assistant discovery topic prefix (default: `homeassistant`).
+* `--mqtt-name`: Display name in Home Assistant (default: `LED Strip`).
+* `--mqtt-client-id`: Unique client ID & device identifier in Home Assistant (default: `ledctl`).
+
+### Supported Home Assistant Features
+
+* **State**: Turn light ON / OFF.
+* **Brightness**: Adjust LED brightness (0 - 255).
+* **Color**: Full RGB color control (mapped according to LED strip hardware limits).
+* **Effects**: Select effects directly from Home Assistant UI:
+  * `FADE_ALL`
+  * `ZIP_SET_ALL`
+  * `CYCLE`
+  * `RAINBOW`
+  * `KNIGHTRIDER`
+
 ## Disclaimer
 
 I am not associated in any way with NBC, David Hasselhoff or the creators of Knight Rider. Especially David Hasselhoff.
