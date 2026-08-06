@@ -2,6 +2,7 @@ package effects
 
 import (
 	pixarray "github.com/Jon-Bright/ledctl/pixarray"
+	rpi "github.com/Jon-Bright/ledctl/rpi"
 	"math"
 	"testing"
 	"time"
@@ -25,6 +26,10 @@ func (l *testLeds) Write() error {
 
 func (l *testLeds) MaxPerChannel() int {
 	return 160
+}
+
+func (l *testLeds) RPi() *rpi.RPi {
+	return nil
 }
 
 func newTestLeds(numPixels int) pixarray.LEDStrip {

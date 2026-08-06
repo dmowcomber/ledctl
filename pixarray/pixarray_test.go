@@ -1,6 +1,7 @@
 package pixarray
 
 import (
+	rpi "github.com/Jon-Bright/ledctl/rpi"
 	"testing"
 )
 
@@ -22,6 +23,10 @@ func (l *testLeds) Write() error {
 
 func (l *testLeds) MaxPerChannel() int {
 	return 160
+}
+
+func (l *testLeds) RPi() *rpi.RPi {
+	return nil
 }
 
 func newTestLeds(numPixels int) LEDStrip {
