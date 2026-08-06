@@ -49,7 +49,7 @@ const (
 
 func (rp *RPi) gpioSetPinFunction(pin int, fnc uint32) error {
 	if pin > pinMax {
-		return fmt.Errorf("pin %d not supported")
+		return fmt.Errorf("pin %d not supported", pin)
 	}
 	reg := pin / 10
 	offset := uint((pin % 10) * 3)
@@ -93,7 +93,7 @@ func (rp *RPi) gpioSetAltFunction(pin int, alt int) error {
 
 func (rp *RPi) GPIOSetPin(pin int, val bool) error {
 	if pin > pinMax {
-		return fmt.Errorf("pin %d not supported")
+		return fmt.Errorf("pin %d not supported", pin)
 	}
 	reg := pin / 32
 	offset := uint(pin % 32)
@@ -107,7 +107,7 @@ func (rp *RPi) GPIOSetPin(pin int, val bool) error {
 
 func (rp *RPi) GPIOGetPin(pin int) (bool, error) {
 	if pin > pinMax {
-		return false, fmt.Errorf("pin %d not supported")
+		return false, fmt.Errorf("pin %d not supported", pin)
 	}
 	reg := pin / 32
 	offset := uint(pin % 32)

@@ -86,7 +86,7 @@ func TestIowr(t *testing.T) {
 		size interface{}
 		want uint32
 	}{
-		{"IOCTL_MBOX_PROPERTY", MAJOR_NUM, 0, uintptr(0), 0xC0046400},
+		{"IOCTL_MBOX_PROPERTY", MAJOR_NUM, 0, uint32(0), 0xC0046400},
 	}
 
 	for _, test := range tests {
