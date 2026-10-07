@@ -142,7 +142,13 @@ func (rp *RPi) StartDMA(d *DMABuf) {
 	time.Sleep(10 * time.Microsecond)
 
 	rp.dma.conblkAd = uint32(d.pb.busAddr)
+	// Let the control block address land before activating the DMA below. Without
+	// a gap the write can be lost on some Pi models (e.g. the Pi Zero 2 W), so the
+	// DMA starts with no control block and stalls. The Pi 3 tolerates back-to-back
+	// writes.
+	time.Sleep(10 * time.Microsecond)
 	rp.dma.debug = 7 // clear debug error flags
+	time.Sleep(10 * time.Microsecond)
 	rp.dma.cs = RPI_DMA_CS_WAIT_OUTSTANDING_WRITES |
 		rpiDmaCsPanicPriority(15) |
 		rpiDmaCsPriority(15) |

@@ -100,9 +100,15 @@ func (rp *RPi) InitPWM(freq uint, buf *DMABuf, bytes uint, pins []int) error {
 
 	rp.StopPWM()
 
-	// Set up the clock - Use OSC @ 19.2Mhz w/ 3 clocks/tick
+	// Set up the clock. Use OSC @ 19.2Mhz w/ 3 clocks/tick.
+	// Give each clock-manager write time to settle before the next. Without a gap a
+	// write can be lost on some Pi models (e.g. the Pi Zero 2 W). For example, if the
+	// divider write fails to take, the clock runs at the wrong rate and the DMA
+	// later stalls. The Pi 3 tolerates back-to-back writes.
 	rp.cmClk.div = CM_CLK_DIV_PASSWD | cmClkDivI(oscFreq/(3*uint32(freq)))
+	time.Sleep(10 * time.Microsecond)
 	rp.cmClk.ctl = CM_CLK_CTL_PASSWD | CM_CLK_CTL_SRC_OSC
+	time.Sleep(10 * time.Microsecond)
 	rp.cmClk.ctl = CM_CLK_CTL_PASSWD | CM_CLK_CTL_SRC_OSC | CM_CLK_CTL_ENAB
 	time.Sleep(10 * time.Microsecond)
 	log.Printf("Waiting for cmClk busy\n")
