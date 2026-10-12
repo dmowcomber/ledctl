@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	effects "github.com/Jon-Bright/ledctl/effects"
-	pixarray "github.com/Jon-Bright/ledctl/pixarray"
+	effects "github.com/dmowcomber/ledctl/effects"
+	pixarray "github.com/dmowcomber/ledctl/pixarray"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 

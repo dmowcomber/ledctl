@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	rpi "github.com/Jon-Bright/ledctl/rpi"
+	rpi "github.com/dmowcomber/ledctl/rpi"
 	"log"
 	"time"
 )

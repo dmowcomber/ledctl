@@ -2,7 +2,7 @@ package effects
 
 import (
 	"fmt"
-	pixarray "github.com/Jon-Bright/ledctl/pixarray"
+	pixarray "github.com/dmowcomber/ledctl/pixarray"
 	"log"
 	"math"
 	"time"

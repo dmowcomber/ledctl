@@ -1,8 +1,8 @@
 package effects
 
 import (
-	pixarray "github.com/Jon-Bright/ledctl/pixarray"
-	rpi "github.com/Jon-Bright/ledctl/rpi"
+	pixarray "github.com/dmowcomber/ledctl/pixarray"
+	rpi "github.com/dmowcomber/ledctl/rpi"
 	"math"
 	"testing"
 	"time"

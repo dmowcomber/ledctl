@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	effects "github.com/Jon-Bright/ledctl/effects"
-	pixarray "github.com/Jon-Bright/ledctl/pixarray"
-	rpi "github.com/Jon-Bright/ledctl/rpi"
+	effects "github.com/dmowcomber/ledctl/effects"
+	pixarray "github.com/dmowcomber/ledctl/pixarray"
+	rpi "github.com/dmowcomber/ledctl/rpi"
 )
 
 type testLeds struct {

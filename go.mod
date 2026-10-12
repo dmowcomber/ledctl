@@ -1,4 +1,4 @@
-module github.com/Jon-Bright/ledctl
+module github.com/dmowcomber/ledctl
 
 go 1.24.0
 
